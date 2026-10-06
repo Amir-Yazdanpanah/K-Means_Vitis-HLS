@@ -1,0 +1,313 @@
+
+
+================================================================
+== Synthesis Summary Report of 'do_compute'
+================================================================
++ General Information: 
+    * Date:           Tue Jul  8 09:52:51 2025
+    * Version:        2024.1 (Build 5069499 on May 21 2024)
+    * Project:        KMEANS_HLS_base
+    * Solution:       solution_KMEANS_HLS_base (Vivado IP Flow Target)
+    * Product family: virtexuplusHBM
+    * Target device:  xcu50-fsvh2104-2-e
+    
+
++ Performance & Resource Estimates: 
+    
+    PS: '+' for module; 'o' for loop; '*' for dataflow
+    +---------------------------------------+------+------+---------+-----------+----------+---------+------+----------+---------+----------+------------+------------+-----+
+    |                Modules                | Issue|      | Latency |  Latency  | Iteration|         | Trip |          |         |          |            |            |     |
+    |                & Loops                | Type | Slack| (cycles)|    (ns)   |  Latency | Interval| Count| Pipelined|  BRAM   |    DSP   |     FF     |     LUT    | URAM|
+    +---------------------------------------+------+------+---------+-----------+----------+---------+------+----------+---------+----------+------------+------------+-----+
+    |+ do_compute                           |     -|  0.00|     2074|  1.037e+04|         -|     2075|     -|        no|  4 (~0%)|  28 (~0%)|  9511 (~0%)|   9296 (1%)|    -|
+    | + do_compute_Pipeline_centroid_buf    |     -|  0.00|        7|     35.000|         -|        7|     -|        no|        -|         -|    44 (~0%)|   107 (~0%)|    -|
+    |  o centroid_buf                       |     -|  3.65|        5|     25.000|         3|        1|     4|       yes|        -|         -|           -|           -|    -|
+    | + do_compute_Pipeline_data_buf        |     -|  0.00|       42|    210.000|         -|       42|     -|        no|        -|         -|  1295 (~0%)|    75 (~0%)|    -|
+    |  o data_buf                           |     -|  3.65|       40|    200.000|         2|        1|    40|       yes|        -|         -|           -|           -|    -|
+    | o S0_Iteration                        |     -|  3.65|     2019|  1.010e+04|       199|        -|    10|        no|        -|         -|           -|           -|    -|
+    |  + do_compute_Pipeline_S1_points_0    |     -|  0.00|       49|    245.000|         -|       49|     -|        no|        -|  14 (~0%)|  2044 (~0%)|  1872 (~0%)|    -|
+    |   o S1_points_0                       |     -|  3.65|       47|    235.000|        29|        1|    20|       yes|        -|         -|           -|           -|    -|
+    |  + do_compute_Pipeline_S2_KDims_0     |     -|  1.99|        6|     30.000|         -|        6|     -|        no|        -|         -|     5 (~0%)|    49 (~0%)|    -|
+    |   o S2_KDims_0                        |     -|  3.65|        4|     20.000|         1|        1|     4|       yes|        -|         -|           -|           -|    -|
+    |  + do_compute_Pipeline_S2_Points_0    |     -|  0.00|       66|    330.000|         -|       66|     -|        no|        -|         -|   902 (~0%)|  1577 (~0%)|    -|
+    |   o S2_Points_0                       |    II|  3.65|       64|    320.000|         8|        3|    20|       yes|        -|         -|           -|           -|    -|
+    |  + do_compute_Pipeline_S2_Clusters_0  |     -|  0.02|       17|     85.000|         -|       17|     -|        no|        -|         -|   357 (~0%)|   162 (~0%)|    -|
+    |   o S2_Clusters_0                     |     -|  3.65|       15|     75.000|        15|        1|     2|       yes|        -|         -|           -|           -|    -|
+    |  + do_compute_Pipeline_S3_Clusters_0  |     -|  0.45|       25|    125.000|         -|       25|     -|        no|        -|         -|   595 (~0%)|   374 (~0%)|    -|
+    |   o S3_Clusters_0                     |     -|  3.65|       23|    115.000|        23|        1|     2|       yes|        -|         -|           -|           -|    -|
+    |  + do_compute_Pipeline_memcp_1        |     -|  2.34|        4|     20.000|         -|        4|     -|        no|        -|         -|   134 (~0%)|   230 (~0%)|    -|
+    |   o memcp_1                           |     -|  3.65|        2|     10.000|         2|        1|     2|       yes|        -|         -|           -|           -|    -|
+    |  o S0_Iteration.1                     |     -|  3.65|        2|     10.000|         1|        -|     2|        no|        -|         -|           -|           -|    -|
+    +---------------------------------------+------+------+---------+-----------+----------+---------+------+----------+---------+----------+------------+------------+-----+
+
+
+================================================================
+== HW Interfaces
+================================================================
+* M_AXI
++-------------+------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+| Interface   | Read/Write | Data Width | Address Width | Latency | Offset | Register | Max Widen | Max Read     | Max Write    | Num Read    | Num Write   | Resource Estimate |
+|             |            | (SW->HW)   |               |         |        |          | Bitwidth  | Burst Length | Burst Length | Outstanding | Outstanding |                   |
++-------------+------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+| m_axi_gmem0 | READ_ONLY  | 32 -> 32   | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=1            |
+| m_axi_gmem1 | READ_WRITE | 32 -> 32   | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=2            |
+| m_axi_gmem2 | READ_ONLY  | 32 -> 32   | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=1            |
++-------------+------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+
+* S_AXILITE Interfaces
++-----------------+------------+---------------+--------+----------+
+| Interface       | Data Width | Address Width | Offset | Register |
++-----------------+------------+---------------+--------+----------+
+| s_axi_control   | 32         | 6             | 16     | 0        |
+| s_axi_control_r | 32         | 4             |        |          |
++-----------------+------------+---------------+--------+----------+
+
+* S_AXILITE Registers
++-----------------+-------------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| Interface       | Register    | Offset | Width | Access | Description                      | Bit Fields                                                           |
++-----------------+-------------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| s_axi_control   | data_1      | 0x10   | 32    | W      | Data signal of data              |                                                                      |
+| s_axi_control   | data_2      | 0x14   | 32    | W      | Data signal of data              |                                                                      |
+| s_axi_control   | classMap_1  | 0x1c   | 32    | W      | Data signal of classMap          |                                                                      |
+| s_axi_control   | classMap_2  | 0x20   | 32    | W      | Data signal of classMap          |                                                                      |
+| s_axi_control   | centroids_1 | 0x28   | 32    | W      | Data signal of centroids         |                                                                      |
+| s_axi_control   | centroids_2 | 0x2c   | 32    | W      | Data signal of centroids         |                                                                      |
+| s_axi_control_r | CTRL        | 0x00   | 32    | RW     | Control signals                  | 0=AP_START 1=AP_DONE 2=AP_IDLE 3=AP_READY 7=AUTO_RESTART 9=INTERRUPT |
+| s_axi_control_r | GIER        | 0x04   | 32    | RW     | Global Interrupt Enable Register | 0=Enable                                                             |
+| s_axi_control_r | IP_IER      | 0x08   | 32    | RW     | IP Interrupt Enable Register     | 0=CHAN0_INT_EN 1=CHAN1_INT_EN                                        |
+| s_axi_control_r | IP_ISR      | 0x0c   | 32    | RW     | IP Interrupt Status Register     | 0=CHAN0_INT_ST 1=CHAN1_INT_ST                                        |
++-----------------+-------------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+
+* TOP LEVEL CONTROL
++-----------+------------+-----------+
+| Interface | Type       | Ports     |
++-----------+------------+-----------+
+| ap_clk    | clock      | ap_clk    |
+| ap_rst_n  | reset      | ap_rst_n  |
+| interrupt | interrupt  | interrupt |
+| ap_ctrl   | ap_ctrl_hs |           |
++-----------+------------+-----------+
+
+
+================================================================
+== SW I/O Information
+================================================================
+* Top Function Arguments
++-----------+-----------+----------+
+| Argument  | Direction | Datatype |
++-----------+-----------+----------+
+| data      | in        | float*   |
+| classMap  | inout     | int*     |
+| centroids | in        | float*   |
++-----------+-----------+----------+
+
+* SW-to-HW Mapping
++-----------+---------------+-----------+----------+---------------------------------------+
+| Argument  | HW Interface  | HW Type   | HW Usage | HW Info                               |
++-----------+---------------+-----------+----------+---------------------------------------+
+| data      | m_axi_gmem0   | interface |          | channel=0                             |
+| data      | s_axi_control | register  | offset   | name=data_1 offset=0x10 range=32      |
+| data      | s_axi_control | register  | offset   | name=data_2 offset=0x14 range=32      |
+| classMap  | m_axi_gmem1   | interface |          | channel=0                             |
+| classMap  | s_axi_control | register  | offset   | name=classMap_1 offset=0x1c range=32  |
+| classMap  | s_axi_control | register  | offset   | name=classMap_2 offset=0x20 range=32  |
+| centroids | m_axi_gmem2   | interface |          | channel=0                             |
+| centroids | s_axi_control | register  | offset   | name=centroids_1 offset=0x28 range=32 |
+| centroids | s_axi_control | register  | offset   | name=centroids_2 offset=0x2c range=32 |
++-----------+---------------+-----------+----------+---------------------------------------+
+
+
+================================================================
+== M_AXI Burst Information
+================================================================
+ Note: All burst requests might be further partitioned into multiple requests during RTL generation based on max_read_burst_length or max_write_burst_length settings.
+
+* Inferred Burst Summary
++--------------+-----------+--------+-------+--------------+---------------------------+
+| HW Interface | Direction | Length | Width | Loop         | Loop Location             |
++--------------+-----------+--------+-------+--------------+---------------------------+
+| m_axi_gmem0  | read      | 40     | 32    | data_buf     | KMEANS_HLS_base.cpp:98:5  |
+| m_axi_gmem1  | read      | 20     | 32    | S2_Points_0  | KMEANS_HLS_base.cpp:151:9 |
+| m_axi_gmem2  | read      | 4      | 32    | centroid_buf | KMEANS_HLS_base.cpp:88:5  |
++--------------+-----------+--------+-------+--------------+---------------------------+
+
+* All M_AXI Variable Accesses
++--------------+-----------+----------------------------+-----------+--------------+--------+--------------+---------------------------+------------+---------------------------------------------------------------------------------------------------------+
+| HW Interface | Variable  | Access Location            | Direction | Burst Status | Length | Loop         | Loop Location             | Resolution | Problem                                                                                                 |
++--------------+-----------+----------------------------+-----------+--------------+--------+--------------+---------------------------+------------+---------------------------------------------------------------------------------------------------------+
+| m_axi_gmem0  | data      | KMEANS_HLS_base.cpp:100:18 | read      | Widen Fail   |        | data_buf     | KMEANS_HLS_base.cpp:98:5  | 214-353    | Could not widen since type float size is greater than or equal to the max_widen_bitwidth threshold of 0 |
+| m_axi_gmem0  | data      | KMEANS_HLS_base.cpp:100:18 | read      | Inferred     | 40     | data_buf     | KMEANS_HLS_base.cpp:98:5  |            |                                                                                                         |
+| m_axi_gmem1  | classMap  | KMEANS_HLS_base.cpp:136:17 | read      | Fail         |        |              |                           | 214-231    | Access is clobbered by store                                                                            |
+| m_axi_gmem1  | classMap  | KMEANS_HLS_base.cpp:139:25 | write     | Fail         |        |              |                           | 214-231    | Access is clobbered by load                                                                             |
+| m_axi_gmem1  | classMap  | KMEANS_HLS_base.cpp:153:14 | read      | Widen Fail   |        | S2_Points_0  | KMEANS_HLS_base.cpp:151:9 | 214-353    | Could not widen since type i32 size is greater than or equal to the max_widen_bitwidth threshold of 0   |
+| m_axi_gmem1  | classMap  | KMEANS_HLS_base.cpp:153:14 | read      | Inferred     | 20     | S2_Points_0  | KMEANS_HLS_base.cpp:151:9 |            |                                                                                                         |
+| m_axi_gmem2  | centroids | KMEANS_HLS_base.cpp:90:23  | read      | Widen Fail   |        | centroid_buf | KMEANS_HLS_base.cpp:88:5  | 214-353    | Could not widen since type float size is greater than or equal to the max_widen_bitwidth threshold of 0 |
+| m_axi_gmem2  | centroids | KMEANS_HLS_base.cpp:90:23  | read      | Inferred     | 4      | centroid_buf | KMEANS_HLS_base.cpp:88:5  |            |                                                                                                         |
++--------------+-----------+----------------------------+-----------+--------------+--------+--------------+---------------------------+------------+---------------------------------------------------------------------------------------------------------+
+
+    * Resolution URL: docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=XXX-YYY.html (replace XXX-YYY with column value)
+
+================================================================
+== Bind Op Report
+================================================================
++---------------------------------------+-----+--------+------------------+-----------+----------+---------+
+| Name                                  | DSP | Pragma | Variable         | Op        | Impl     | Latency |
++---------------------------------------+-----+--------+------------------+-----------+----------+---------+
+| + do_compute                          | 28  |        |                  |           |          |         |
+|   icmp_ln107_fu_883_p2                |     |        | icmp_ln107       | seteq     | auto     | 0       |
+|   it_2_fu_889_p2                      |     |        | it_2             | add       | fabric   | 0       |
+|   exitcond_fu_898_p2                  |     |        | exitcond         | seteq     | auto     | 0       |
+|   empty_50_fu_904_p2                  |     |        | empty_50         | add       | fabric   | 0       |
+|   cond400_fu_910_p2                   |     |        | cond400          | seteq     | auto     | 0       |
+|   pointsPerClass_5_fu_916_p3          |     |        | pointsPerClass_5 | select    | auto_sel | 0       |
+|   pointsPerClass_4_fu_924_p3          |     |        | pointsPerClass_4 | select    | auto_sel | 0       |
+|   fsqrt_32ns_32ns_32_9_no_dsp_1_U205  |     |        | maxDist          | fsqrt     | fabric   | 8       |
+|   icmp_ln207_fu_932_p2                |     |        | icmp_ln207       | setlt     | auto     | 0       |
+|   icmp_ln207_1_fu_978_p2              |     |        | icmp_ln207_1     | setne     | auto     | 0       |
+|   icmp_ln207_2_fu_984_p2              |     |        | icmp_ln207_2     | seteq     | auto     | 0       |
+|   or_ln207_fu_990_p2                  |     |        | or_ln207         | or        | auto     | 0       |
+|   fcmp_32ns_32ns_1_2_no_dsp_1_U204    |     |        | tmp_3            | fcmp      | auto     | 1       |
+|   and_ln207_fu_994_p2                 |     |        | and_ln207        | and       | auto     | 0       |
+|  + do_compute_Pipeline_centroid_buf   | 0   |        |                  |           |          |         |
+|    icmp_ln88_fu_111_p2                |     |        | icmp_ln88        | seteq     | auto     | 0       |
+|    add_ln88_fu_117_p2                 |     |        | add_ln88         | add       | fabric   | 0       |
+|  + do_compute_Pipeline_data_buf       | 0   |        |                  |           |          |         |
+|    icmp_ln98_fu_667_p2                |     |        | icmp_ln98        | seteq     | auto     | 0       |
+|    add_ln98_fu_673_p2                 |     |        | add_ln98         | add       | fabric   | 0       |
+|  + do_compute_Pipeline_S1_points_0    | 14  |        |                  |           |          |         |
+|    icmp_ln115_fu_593_p2               |     |        | icmp_ln115       | seteq     | auto     | 0       |
+|    add_ln115_fu_599_p2                |     |        | add_ln115        | add       | fabric   | 0       |
+|    sparsemux_41_5_32_1_1_U63          |     |        | tmp              | sparsemux | auto     | 0       |
+|    fadd_32ns_32ns_32_5_full_dsp_1_U53 | 2   |        | dist             | fadd      | fulldsp  | 4       |
+|    sparsemux_41_5_32_1_1_U64          |     |        | tmp_1            | sparsemux | auto     | 0       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U59  | 3   |        | mul48_s          | fmul      | maxdsp   | 3       |
+|    fadd_32ns_32ns_32_5_full_dsp_1_U55 | 2   |        | dist_1           | fadd      | fulldsp  | 4       |
+|    icmp_ln129_fu_803_p2               |     |        | icmp_ln129       | setne     | auto     | 0       |
+|    icmp_ln129_1_fu_809_p2             |     |        | icmp_ln129_1     | seteq     | auto     | 0       |
+|    or_ln129_fu_815_p2                 |     |        | or_ln129         | or        | auto     | 0       |
+|    and_ln129_fu_821_p2                |     |        | and_ln129        | and       | auto     | 0       |
+|    minDist_fu_827_p3                  |     |        | minDist          | select    | auto_sel | 0       |
+|    fadd_32ns_32ns_32_5_full_dsp_1_U54 | 2   |        | dist_2           | fadd      | fulldsp  | 4       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U60  | 3   |        | mul48_1_1        | fmul      | maxdsp   | 3       |
+|    fadd_32ns_32ns_32_5_full_dsp_1_U56 | 2   |        | dist_3           | fadd      | fulldsp  | 4       |
+|    icmp_ln129_2_fu_870_p2             |     |        | icmp_ln129_2     | setne     | auto     | 0       |
+|    icmp_ln129_3_fu_876_p2             |     |        | icmp_ln129_3     | seteq     | auto     | 0       |
+|    or_ln129_1_fu_897_p2               |     |        | or_ln129_1       | or        | auto     | 0       |
+|    icmp_ln129_4_fu_882_p2             |     |        | icmp_ln129_4     | setne     | auto     | 0       |
+|    icmp_ln129_5_fu_888_p2             |     |        | icmp_ln129_5     | seteq     | auto     | 0       |
+|    or_ln129_2_fu_901_p2               |     |        | or_ln129_2       | or        | auto     | 0       |
+|    and_ln129_1_fu_905_p2              |     |        | and_ln129_1      | and       | auto     | 0       |
+|    fcmp_32ns_32ns_1_2_no_dsp_1_U62    |     |        | tmp_9            | fcmp      | auto     | 1       |
+|    and_ln129_2_fu_911_p2              |     |        | and_ln129_2      | and       | auto     | 0       |
+|    select_ln136_fu_917_p3             |     |        | select_ln136     | select    | auto_sel | 0       |
+|    add_ln136_fu_617_p2                |     |        | add_ln136        | add       | fabric   | 0       |
+|    icmp_ln136_fu_925_p2               |     |        | icmp_ln136       | setne     | auto     | 0       |
+|    add_ln137_fu_930_p2                |     |        | add_ln137        | add       | fabric   | 0       |
+|    changes_1_fu_936_p3                |     |        | changes_1        | select    | auto_sel | 0       |
+|  + do_compute_Pipeline_S2_KDims_0     | 0   |        |                  |           |          |         |
+|    icmp_ln145_fu_72_p2                |     |        | icmp_ln145       | seteq     | auto     | 0       |
+|    add_ln145_fu_78_p2                 |     |        | add_ln145        | add       | fabric   | 0       |
+|  + do_compute_Pipeline_S2_Points_0    | 0   |        |                  |           |          |         |
+|    icmp_ln151_fu_579_p2               |     |        | icmp_ln151       | seteq     | auto     | 0       |
+|    add_ln151_fu_585_p2                |     |        | add_ln151        | add       | fabric   | 0       |
+|    icmp_ln154_1_fu_791_p2             |     |        | icmp_ln154_1     | seteq     | auto     | 0       |
+|    select_ln154_fu_796_p3             |     |        | select_ln154     | select    | auto_sel | 0       |
+|    pointsPerClass_4_fu_804_p2         |     |        | pointsPerClass_4 | add       | fabric   | 0       |
+|    icmp_ln154_fu_810_p2               |     |        | icmp_ln154       | seteq     | auto     | 0       |
+|    pointsPerClass_6_fu_815_p3         |     |        | pointsPerClass_6 | select    | auto_sel | 0       |
+|    pointsPerClass_5_fu_823_p3         |     |        | pointsPerClass_5 | select    | auto_sel | 0       |
+|    mul2_fu_839_p2                     |     |        | mul2             | xor       | auto     | 0       |
+|    sparsemux_41_5_32_1_1_U120         |     |        | tmp_4            | sparsemux | auto     | 0       |
+|    sparsemux_41_5_32_1_1_U121         |     |        | tmp_5            | sparsemux | auto     | 0       |
+|    addr_cmp52_fu_854_p2               |     |        | addr_cmp52       | seteq     | auto     | 0       |
+|    grp_fu_527_p0                      |     |        | reuse_select53   | select    | auto_sel | 0       |
+|    fadd_32ns_32ns_32_4_no_dsp_1_U118  |     |        | add              | fadd      | fabric   | 3       |
+|    addr_cmp_fu_868_p2                 |     |        | addr_cmp         | seteq     | auto     | 0       |
+|    grp_fu_532_p0                      |     |        | reuse_select     | select    | auto_sel | 0       |
+|    fadd_32ns_32ns_32_4_no_dsp_1_U119  |     |        | add108_1         | fadd      | fabric   | 3       |
+|  + do_compute_Pipeline_S2_Clusters_0  | 0   |        |                  |           |          |         |
+|    icmp_ln163_fu_103_p2               |     |        | icmp_ln163       | seteq     | auto     | 0       |
+|    add_ln163_fu_109_p2                |     |        | add_ln163        | add       | fabric   | 0       |
+|    empty_fu_115_p2                    |     |        | empty            | seteq     | auto     | 0       |
+|    tmp_3_fu_121_p3                    |     |        | tmp_3            | select    | auto_sel | 0       |
+|    sitofp_32ns_32_3_no_dsp_1_U173     |     |        | conv             | sitofp    | auto     | 2       |
+|    fdiv_32ns_32ns_32_10_no_dsp_1_U171 |     |        | div              | fdiv      | fabric   | 9       |
+|    fdiv_32ns_32ns_32_10_no_dsp_1_U172 |     |        | div_1            | fdiv      | fabric   | 9       |
+|  + do_compute_Pipeline_S3_Clusters_0  | 0   |        |                  |           |          |         |
+|    icmp_ln176_fu_163_p2               |     |        | icmp_ln176       | seteq     | auto     | 0       |
+|    add_ln176_fu_169_p2                |     |        | add_ln176        | add       | fabric   | 0       |
+|    icmp_ln183_fu_180_p2               |     |        | icmp_ln183       | seteq     | auto     | 0       |
+|    select_ln183_fu_191_p3             |     |        | select_ln183     | select    | auto_sel | 0       |
+|    select_ln183_1_fu_197_p3           |     |        | select_ln183_1   | select    | auto_sel | 0       |
+|    icmp_ln185_fu_241_p2               |     |        | icmp_ln185       | setne     | auto     | 0       |
+|    icmp_ln185_1_fu_247_p2             |     |        | icmp_ln185_1     | seteq     | auto     | 0       |
+|    or_ln185_fu_253_p2                 |     |        | or_ln185         | or        | auto     | 0       |
+|    icmp_ln185_2_fu_259_p2             |     |        | icmp_ln185_2     | setne     | auto     | 0       |
+|    icmp_ln185_3_fu_265_p2             |     |        | icmp_ln185_3     | seteq     | auto     | 0       |
+|    or_ln185_1_fu_271_p2               |     |        | or_ln185_1       | or        | auto     | 0       |
+|    and_ln185_fu_277_p2                |     |        | and_ln185        | and       | auto     | 0       |
+|    and_ln185_1_fu_283_p2              |     |        | and_ln185_1      | and       | auto     | 0       |
+|    maxDist_2_fu_289_p3                |     |        | maxDist_2        | select    | auto_sel | 0       |
+|  + do_compute_Pipeline_memcp_1        | 0   |        |                  |           |          |         |
+|    icmp_ln196_fu_174_p2               |     |        | icmp_ln196       | seteq     | auto     | 0       |
+|    add_ln196_fu_180_p2                |     |        | add_ln196        | add       | fabric   | 0       |
+|    icmp_ln201_fu_192_p2               |     |        | icmp_ln201       | seteq     | auto     | 0       |
+|    select_ln201_fu_215_p3             |     |        | select_ln201     | select    | auto_sel | 0       |
+|    select_ln201_1_fu_222_p3           |     |        | select_ln201_1   | select    | auto_sel | 0       |
+|    select_ln201_2_fu_229_p3           |     |        | select_ln201_2   | select    | auto_sel | 0       |
+|    select_ln201_3_fu_236_p3           |     |        | select_ln201_3   | select    | auto_sel | 0       |
++---------------------------------------+-----+--------+------------------+-----------+----------+---------+
+
+
+================================================================
+== Storage Report
+================================================================
++---------------------+---------------+-----------+------+------+--------+----------------+------+---------+------------------+
+| Name                | Usage         | Type      | BRAM | URAM | Pragma | Variable       | Impl | Latency | Bitwidth, Depth, |
+|                     |               |           |      |      |        |                |      |         | Banks            |
++---------------------+---------------+-----------+------+------+--------+----------------+------+---------+------------------+
+| + do_compute        |               |           | 4    | 0    |        |                |      |         |                  |
+|   control_s_axi_U   | interface     | s_axilite |      |      |        |                |      |         |                  |
+|   control_r_s_axi_U | interface     | s_axilite |      |      |        |                |      |         |                  |
+|   gmem0_m_axi_U     | interface     | m_axi     | 1    |      |        |                |      |         |                  |
+|   gmem1_m_axi_U     | interface     | m_axi     | 2    |      |        |                |      |         |                  |
+|   gmem2_m_axi_U     | interface     | m_axi     | 1    |      |        |                |      |         |                  |
+|   auxCentroids_U    | ram_s2p array |           |      |      |        | auxCentroids   | auto | 1       | 32, 2, 1         |
+|   auxCentroids_1_U  | ram_s2p array |           |      |      |        | auxCentroids_1 | auto | 1       | 32, 2, 1         |
++---------------------+---------------+-----------+------+------+--------+----------------+------+---------+------------------+
+
+
+================================================================
+== Pragma Report
+================================================================
+* Valid Pragma Syntax
++-----------------+--------------------------------------------------+-------------------------------------------------------+
+| Type            | Options                                          | Location                                              |
++-----------------+--------------------------------------------------+-------------------------------------------------------+
+| interface       | m_axi port=data offset=slave bundle=gmem0        | KMEANS_HLS_base.cpp:40 in do_compute, data            |
+| interface       | m_axi port=classMap offset=slave bundle=gmem1    | KMEANS_HLS_base.cpp:41 in do_compute, classMap        |
+| interface       | m_axi port=centroids offset=slave bundle=gmem2   | KMEANS_HLS_base.cpp:42 in do_compute, centroids       |
+| interface       | s_axilite port=data bundle=control               | KMEANS_HLS_base.cpp:43 in do_compute, data            |
+| interface       | s_axilite port=classMap bundle=control           | KMEANS_HLS_base.cpp:44 in do_compute, classMap        |
+| interface       | s_axilite port=centroids bundle=control          | KMEANS_HLS_base.cpp:45 in do_compute, centroids       |
+| interface       | s_axilite port=return                            | KMEANS_HLS_base.cpp:46 in do_compute, return          |
+| array_partition | variable=auxCentroids cyclic factor=2 dim=1      | KMEANS_HLS_base.cpp:81 in do_compute, auxCentroids    |
+| array_partition | variable=local_centroids cyclic factor=2*2 dim=1 | KMEANS_HLS_base.cpp:86 in do_compute, local_centroids |
+| pipeline        | II=1                                             | KMEANS_HLS_base.cpp:89 in do_compute                  |
+| array_partition | variable=local_data cyclic factor=20*2 dim=1     | KMEANS_HLS_base.cpp:96 in do_compute, local_data      |
+| pipeline        | II=1                                             | KMEANS_HLS_base.cpp:99 in do_compute                  |
+| loop_tripcount  | min=1 max=10                                     | KMEANS_HLS_base.cpp:108 in do_compute                 |
+| pipeline        | II=1                                             | KMEANS_HLS_base.cpp:116 in do_compute                 |
+| unroll          |                                                  | KMEANS_HLS_base.cpp:126 in do_compute                 |
+| pipeline        | II=1                                             | KMEANS_HLS_base.cpp:146 in do_compute                 |
+| pipeline        | II=1                                             | KMEANS_HLS_base.cpp:152 in do_compute                 |
+| unroll          |                                                  | KMEANS_HLS_base.cpp:157 in do_compute                 |
+| pipeline        | II=1                                             | KMEANS_HLS_base.cpp:164 in do_compute                 |
+| unroll          |                                                  | KMEANS_HLS_base.cpp:167 in do_compute                 |
+| pipeline        | II=1                                             | KMEANS_HLS_base.cpp:177 in do_compute                 |
+| unroll          |                                                  | KMEANS_HLS_base.cpp:182 in do_compute                 |
+| pipeline        | II=1                                             | KMEANS_HLS_base.cpp:197 in do_compute                 |
+| unroll          |                                                  | KMEANS_HLS_base.cpp:200 in do_compute                 |
++-----------------+--------------------------------------------------+-------------------------------------------------------+
+
+

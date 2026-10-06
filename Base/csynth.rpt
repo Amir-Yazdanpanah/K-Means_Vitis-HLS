@@ -1,0 +1,392 @@
+
+
+================================================================
+== Synthesis Summary Report of 'do_compute'
+================================================================
++ General Information: 
+    * Date:           Mon Jul  7 01:06:12 2025
+    * Version:        2024.1 (Build 5069499 on May 21 2024)
+    * Project:        KMEANS_HLS_base
+    * Solution:       solution_KMEANS_HLS_base (Vivado IP Flow Target)
+    * Product family: virtexuplusHBM
+    * Target device:  xcu50-fsvh2104-2-e
+    
+
++ Performance & Resource Estimates: 
+    
+    PS: '+' for module; 'o' for loop; '*' for dataflow
+    +-----------------------------------------+--------+-------+---------+-----------+----------+---------+------+----------+---------+---------+------------+------------+-----+
+    |                 Modules                 |  Issue |       | Latency |  Latency  | Iteration|         | Trip |          |         |         |            |            |     |
+    |                 & Loops                 |  Type  | Slack | (cycles)|    (ns)   |  Latency | Interval| Count| Pipelined|  BRAM   |   DSP   |     FF     |     LUT    | URAM|
+    +-----------------------------------------+--------+-------+---------+-----------+----------+---------+------+----------+---------+---------+------------+------------+-----+
+    |+ do_compute                             |  Timing|  -0.42|     6840|  2.280e+04|         -|     6841|     -|        no|  5 (~0%)|  7 (~0%)|  5873 (~0%)|  7194 (~0%)|    -|
+    | o VITIS_LOOP_85_1                       |       -|   2.43|     6839|  2.279e+04|       684|        -|    10|        no|        -|        -|           -|           -|    -|
+    |  + do_compute_Pipeline_S1_points_0      |  Timing|  -0.42|      437|  1.457e+03|         -|      437|     -|        no|        -|  5 (~0%)|  1698 (~0%)|  2477 (~0%)|    -|
+    |   o S1_points_0                         |      II|   2.43|      435|  1.450e+03|        56|       20|    20|       yes|        -|        -|           -|           -|    -|
+    |  + do_compute_Pipeline_2                |       -|   0.64|       12|     39.996|         -|       12|     -|        no|        -|        -|     6 (~0%)|    51 (~0%)|    -|
+    |   o Loop 1                              |       -|   2.43|       10|     33.330|         1|        1|    10|       yes|        -|        -|           -|           -|    -|
+    |  + do_compute_Pipeline_S2_KDims_0       |       -|   0.64|       22|     73.326|         -|       22|     -|        no|        -|        -|     7 (~0%)|    51 (~0%)|    -|
+    |   o S2_KDims_0                          |       -|   2.43|       20|     66.660|         1|        1|    20|       yes|        -|        -|           -|           -|    -|
+    |  + do_compute_Pipeline_S2_Points_0      |  Timing|  -0.00|      166|    553.278|         -|      166|     -|        no|        -|        -|   556 (~0%)|   669 (~0%)|    -|
+    |   o S2_Points_0                         |      II|   2.43|      164|    546.612|        13|        8|    20|       yes|        -|        -|           -|           -|    -|
+    |  + do_compute_Pipeline_S2_Clusters_0    |       -|   0.10|       30|     99.990|         -|       30|     -|        no|        -|        -|   371 (~0%)|   126 (~0%)|    -|
+    |   o S2_Clusters_0                       |       -|   2.43|       28|     93.324|        20|        1|    10|       yes|        -|        -|           -|           -|    -|
+    |  + do_compute_Pipeline_memcp_1_memcp_2  |  Timing|  -0.00|       24|     79.992|         -|       24|     -|        no|        -|        -|   117 (~0%)|   196 (~0%)|    -|
+    |   o memcp_1_memcp_2                     |       -|   2.43|       22|     73.326|         4|        1|    20|       yes|        -|        -|           -|           -|    -|
+    +-----------------------------------------+--------+-------+---------+-----------+----------+---------+------+----------+---------+---------+------------+------------+-----+
+
+
+================================================================
+== HW Interfaces
+================================================================
+* M_AXI
++-------------+------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+| Interface   | Read/Write | Data Width | Address Width | Latency | Offset | Register | Max Widen | Max Read     | Max Write    | Num Read    | Num Write   | Resource Estimate |
+|             |            | (SW->HW)   |               |         |        |          | Bitwidth  | Burst Length | Burst Length | Outstanding | Outstanding |                   |
++-------------+------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+| m_axi_gmem0 | READ_ONLY  | 32 -> 32   | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=1            |
+| m_axi_gmem1 | READ_WRITE | 32 -> 32   | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=2            |
+| m_axi_gmem2 | READ_WRITE | 32 -> 32   | 64            | 0       | slave  | 0        | 0         | 16           | 16           | 16          | 16          | BRAM=2            |
++-------------+------------+------------+---------------+---------+--------+----------+-----------+--------------+--------------+-------------+-------------+-------------------+
+
+* S_AXILITE Interfaces
++---------------+------------+---------------+--------+----------+
+| Interface     | Data Width | Address Width | Offset | Register |
++---------------+------------+---------------+--------+----------+
+| s_axi_control | 32         | 6             | 16     | 0        |
++---------------+------------+---------------+--------+----------+
+
+* S_AXILITE Registers
++---------------+-------------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| Interface     | Register    | Offset | Width | Access | Description                      | Bit Fields                                                           |
++---------------+-------------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+| s_axi_control | CTRL        | 0x00   | 32    | RW     | Control signals                  | 0=AP_START 1=AP_DONE 2=AP_IDLE 3=AP_READY 7=AUTO_RESTART 9=INTERRUPT |
+| s_axi_control | GIER        | 0x04   | 32    | RW     | Global Interrupt Enable Register | 0=Enable                                                             |
+| s_axi_control | IP_IER      | 0x08   | 32    | RW     | IP Interrupt Enable Register     | 0=CHAN0_INT_EN 1=CHAN1_INT_EN                                        |
+| s_axi_control | IP_ISR      | 0x0c   | 32    | RW     | IP Interrupt Status Register     | 0=CHAN0_INT_ST 1=CHAN1_INT_ST                                        |
+| s_axi_control | data_1      | 0x10   | 32    | W      | Data signal of data              |                                                                      |
+| s_axi_control | data_2      | 0x14   | 32    | W      | Data signal of data              |                                                                      |
+| s_axi_control | classMap_1  | 0x1c   | 32    | W      | Data signal of classMap          |                                                                      |
+| s_axi_control | classMap_2  | 0x20   | 32    | W      | Data signal of classMap          |                                                                      |
+| s_axi_control | centroids_1 | 0x28   | 32    | W      | Data signal of centroids         |                                                                      |
+| s_axi_control | centroids_2 | 0x2c   | 32    | W      | Data signal of centroids         |                                                                      |
++---------------+-------------+--------+-------+--------+----------------------------------+----------------------------------------------------------------------+
+
+* TOP LEVEL CONTROL
++-----------+------------+-----------+
+| Interface | Type       | Ports     |
++-----------+------------+-----------+
+| ap_clk    | clock      | ap_clk    |
+| ap_rst_n  | reset      | ap_rst_n  |
+| interrupt | interrupt  | interrupt |
+| ap_ctrl   | ap_ctrl_hs |           |
++-----------+------------+-----------+
+
+
+================================================================
+== SW I/O Information
+================================================================
+* Top Function Arguments
++-----------+-----------+----------+
+| Argument  | Direction | Datatype |
++-----------+-----------+----------+
+| data      | in        | float*   |
+| classMap  | inout     | int*     |
+| centroids | inout     | float*   |
++-----------+-----------+----------+
+
+* SW-to-HW Mapping
++-----------+---------------+-----------+----------+---------------------------------------+
+| Argument  | HW Interface  | HW Type   | HW Usage | HW Info                               |
++-----------+---------------+-----------+----------+---------------------------------------+
+| data      | m_axi_gmem0   | interface |          | channel=0                             |
+| data      | s_axi_control | register  | offset   | name=data_1 offset=0x10 range=32      |
+| data      | s_axi_control | register  | offset   | name=data_2 offset=0x14 range=32      |
+| classMap  | m_axi_gmem1   | interface |          | channel=0                             |
+| classMap  | s_axi_control | register  | offset   | name=classMap_1 offset=0x1c range=32  |
+| classMap  | s_axi_control | register  | offset   | name=classMap_2 offset=0x20 range=32  |
+| centroids | m_axi_gmem2   | interface |          | channel=0                             |
+| centroids | s_axi_control | register  | offset   | name=centroids_1 offset=0x28 range=32 |
+| centroids | s_axi_control | register  | offset   | name=centroids_2 offset=0x2c range=32 |
++-----------+---------------+-----------+----------+---------------------------------------+
+
+
+================================================================
+== M_AXI Burst Information
+================================================================
+ Note: All burst requests might be further partitioned into multiple requests during RTL generation based on max_read_burst_length or max_write_burst_length settings.
+
+* Inferred Burst Summary
++--------------+-----------+--------+-------+-------------+---------------------------+
+| HW Interface | Direction | Length | Width | Loop        | Loop Location             |
++--------------+-----------+--------+-------+-------------+---------------------------+
+| m_axi_gmem0  | read      | 2      | 32    |             |                           |
+| m_axi_gmem0  | read      | 40     | 32    | S2_Points_0 | KMEANS_HLS_base.cpp:124:9 |
+| m_axi_gmem1  | write     | 20     | 32    | S1_points_0 | KMEANS_HLS_base.cpp:92:9  |
+| m_axi_gmem1  | read      | 20     | 32    | S2_Points_0 | KMEANS_HLS_base.cpp:124:9 |
+| m_axi_gmem2  | read      | 20     | 32    |             |                           |
+| m_axi_gmem2  | write     | 20     | 32    | memcp_1     | KMEANS_HLS_base.cpp:163:9 |
++--------------+-----------+--------+-------+-------------+---------------------------+
+
+* All M_AXI Variable Accesses
++--------------+-----------+----------------------------+-----------+--------------+--------+-----------------+----------------------------+------------+---------------------------------------------------------------------------------------------------------+
+| HW Interface | Variable  | Access Location            | Direction | Burst Status | Length | Loop            | Loop Location              | Resolution | Problem                                                                                                 |
++--------------+-----------+----------------------------+-----------+--------------+--------+-----------------+----------------------------+------------+---------------------------------------------------------------------------------------------------------+
+| m_axi_gmem0  | data      | KMEANS_HLS_base.cpp:102:30 | read      | Widen Fail   |        | S1_Dims_2       | KMEANS_HLS_base.cpp:101:17 | 214-353    | Could not widen since type float size is greater than or equal to the max_widen_bitwidth threshold of 0 |
+| m_axi_gmem0  | data      | KMEANS_HLS_base.cpp:102:30 | read      | Fail         |        | S1_Clusters_1   | KMEANS_HLS_base.cpp:96:13  | 214-230    | Stride is incompatible                                                                                  |
+| m_axi_gmem0  | data      | KMEANS_HLS_base.cpp:102:30 | read      | Inferred     | 2      | S1_Dims_2       | KMEANS_HLS_base.cpp:101:17 |            |                                                                                                         |
+| m_axi_gmem0  | data      | KMEANS_HLS_base.cpp:129:54 | read      | Widen Fail   |        | S2_Dims_1       | KMEANS_HLS_base.cpp:128:13 | 214-353    | Could not widen since type float size is greater than or equal to the max_widen_bitwidth threshold of 0 |
+| m_axi_gmem0  | data      | KMEANS_HLS_base.cpp:129:54 | read      | Fail         |        | VITIS_LOOP_85_1 | KMEANS_HLS_base.cpp:85:22  | 214-229    | Could not analyze pattern                                                                               |
+| m_axi_gmem0  | data      | KMEANS_HLS_base.cpp:129:54 | read      | Inferred     | 40     | S2_Points_0     | KMEANS_HLS_base.cpp:124:9  |            |                                                                                                         |
+| m_axi_gmem1  | classMap  | KMEANS_HLS_base.cpp:114:25 | write     | Widen Fail   |        | S1_points_0     | KMEANS_HLS_base.cpp:92:9   | 214-353    | Could not widen since type i32 size is greater than or equal to the max_widen_bitwidth threshold of 0   |
+| m_axi_gmem1  | classMap  | KMEANS_HLS_base.cpp:114:25 | write     | Fail         |        | VITIS_LOOP_85_1 | KMEANS_HLS_base.cpp:85:22  | 214-229    | Could not analyze pattern                                                                               |
+| m_axi_gmem1  | classMap  | KMEANS_HLS_base.cpp:114:25 | write     | Inferred     | 20     | S1_points_0     | KMEANS_HLS_base.cpp:92:9   |            |                                                                                                         |
+| m_axi_gmem1  | classMap  | KMEANS_HLS_base.cpp:125:25 | read      | Widen Fail   |        | S2_Points_0     | KMEANS_HLS_base.cpp:124:9  | 214-353    | Could not widen since type i32 size is greater than or equal to the max_widen_bitwidth threshold of 0   |
+| m_axi_gmem1  | classMap  | KMEANS_HLS_base.cpp:125:25 | read      | Fail         |        | VITIS_LOOP_85_1 | KMEANS_HLS_base.cpp:85:22  | 214-229    | Could not analyze pattern                                                                               |
+| m_axi_gmem1  | classMap  | KMEANS_HLS_base.cpp:125:25 | read      | Inferred     | 20     | S2_Points_0     | KMEANS_HLS_base.cpp:124:9  |            |                                                                                                         |
+| m_axi_gmem2  | centroids | KMEANS_HLS_base.cpp:102:50 | read      | Widen Fail   |        | S1_Dims_2       | KMEANS_HLS_base.cpp:101:17 | 214-353    | Could not widen since type float size is greater than or equal to the max_widen_bitwidth threshold of 0 |
+| m_axi_gmem2  | centroids | KMEANS_HLS_base.cpp:102:50 | read      | Fail         |        | S1_points_0     | KMEANS_HLS_base.cpp:92:9   | 214-229    | Could not analyze pattern                                                                               |
+| m_axi_gmem2  | centroids | KMEANS_HLS_base.cpp:102:50 | read      | Inferred     | 20     | S1_Clusters_1   | KMEANS_HLS_base.cpp:96:13  |            |                                                                                                         |
+| m_axi_gmem2  | centroids | KMEANS_HLS_base.cpp:166:40 | write     | Widen Fail   |        | memcp_2         | KMEANS_HLS_base.cpp:165:13 | 214-353    | Could not widen since type float size is greater than or equal to the max_widen_bitwidth threshold of 0 |
+| m_axi_gmem2  | centroids | KMEANS_HLS_base.cpp:166:40 | write     | Fail         |        | VITIS_LOOP_85_1 | KMEANS_HLS_base.cpp:85:22  | 214-229    | Could not analyze pattern                                                                               |
+| m_axi_gmem2  | centroids | KMEANS_HLS_base.cpp:166:40 | write     | Inferred     | 20     | memcp_1         | KMEANS_HLS_base.cpp:163:9  |            |                                                                                                         |
++--------------+-----------+----------------------------+-----------+--------------+--------+-----------------+----------------------------+------------+---------------------------------------------------------------------------------------------------------+
+
+    * Resolution URL: docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=XXX-YYY.html (replace XXX-YYY with column value)
+
+================================================================
+== Bind Op Report
+================================================================
++------------------------------------------+-----+--------+----------------+---------+----------+---------+
+| Name                                     | DSP | Pragma | Variable       | Op      | Impl     | Latency |
++------------------------------------------+-----+--------+----------------+---------+----------+---------+
+| + do_compute                             | 7   |        |                |         |          |         |
+|   faddfsub_32ns_32ns_32_7_full_dsp_1_U37 |     |        | it_3           | add     | fabric   | 0       |
+|   faddfsub_32ns_32ns_32_7_full_dsp_1_U37 |     |        | empty_40       | adapter | m_axi    | 0       |
+|   faddfsub_32ns_32ns_32_7_full_dsp_1_U37 |     |        | empty_43       | adapter | m_axi    | 0       |
+|   icmp_ln171_fu_287_p2                   |     |        | icmp_ln171     | seteq   | auto     | 0       |
+|  + do_compute_Pipeline_S1_points_0       | 5   |        |                |         |          |         |
+|    icmp_ln92_fu_323_p2                   |     |        | icmp_ln92      | seteq   | auto     | 0       |
+|    add_ln92_fu_329_p2                    |     |        | add_ln92       | add     | fabric   | 0       |
+|    empty_fu_347_p2                       |     |        | empty          | add     | fabric   | 0       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U3      | 3   |        | mul            | fmul    | maxdsp   | 3       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U3      | 3   |        | mul22_s        | fmul    | maxdsp   | 3       |
+|    icmp_ln104_fu_602_p2                  |     |        | icmp_ln104     | setne   | auto     | 0       |
+|    icmp_ln104_1_fu_608_p2                |     |        | icmp_ln104_1   | seteq   | auto     | 0       |
+|    or_ln104_4_fu_614_p2                  |     |        | or_ln104_4     | or      | auto     | 0       |
+|    fcmp_32ns_32ns_1_2_no_dsp_1_U4        |     |        | tmp_1          | fcmp    | auto     | 1       |
+|    and_ln104_fu_620_p2                   |     |        | and_ln104      | and     | auto     | 0       |
+|    minDist_fu_626_p3                     |     |        | minDist        | select  | auto_sel | 0       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U3      | 3   |        | mul22_1        | fmul    | maxdsp   | 3       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U3      | 3   |        | mul22_1_1      | fmul    | maxdsp   | 3       |
+|    faddfsub_32ns_32ns_32_7_full_dsp_1_U2 | 2   |        | dist_3         | fsub    | fulldsp  | 6       |
+|    icmp_ln104_2_fu_669_p2                |     |        | icmp_ln104_2   | setne   | auto     | 0       |
+|    icmp_ln104_3_fu_675_p2                |     |        | icmp_ln104_3   | seteq   | auto     | 0       |
+|    or_ln104_5_fu_681_p2                  |     |        | or_ln104_5     | or      | auto     | 0       |
+|    icmp_ln104_4_fu_687_p2                |     |        | icmp_ln104_4   | setne   | auto     | 0       |
+|    icmp_ln104_5_fu_693_p2                |     |        | icmp_ln104_5   | seteq   | auto     | 0       |
+|    or_ln104_6_fu_699_p2                  |     |        | or_ln104_6     | or      | auto     | 0       |
+|    and_ln104_1_fu_705_p2                 |     |        | and_ln104_1    | and     | auto     | 0       |
+|    fcmp_32ns_32ns_1_2_no_dsp_1_U4        |     |        | tmp_4          | fcmp    | auto     | 1       |
+|    and_ln104_2_fu_711_p2                 |     |        | and_ln104_2    | and     | auto     | 0       |
+|    minDist_1_fu_717_p3                   |     |        | minDist_1      | select  | auto_sel | 0       |
+|    select_ln94_fu_994_p3                 |     |        | select_ln94    | select  | auto_sel | 0       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U3      | 3   |        | mul22_2        | fmul    | maxdsp   | 3       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U3      | 3   |        | mul22_2_1      | fmul    | maxdsp   | 3       |
+|    faddfsub_32ns_32ns_32_7_full_dsp_1_U2 | 2   |        | dist_5         | fsub    | fulldsp  | 6       |
+|    icmp_ln104_6_fu_759_p2                |     |        | icmp_ln104_6   | setne   | auto     | 0       |
+|    icmp_ln104_7_fu_765_p2                |     |        | icmp_ln104_7   | seteq   | auto     | 0       |
+|    or_ln104_7_fu_771_p2                  |     |        | or_ln104_7     | or      | auto     | 0       |
+|    icmp_ln104_8_fu_777_p2                |     |        | icmp_ln104_8   | setne   | auto     | 0       |
+|    icmp_ln104_9_fu_783_p2                |     |        | icmp_ln104_9   | seteq   | auto     | 0       |
+|    or_ln104_8_fu_789_p2                  |     |        | or_ln104_8     | or      | auto     | 0       |
+|    and_ln104_3_fu_795_p2                 |     |        | and_ln104_3    | and     | auto     | 0       |
+|    fcmp_32ns_32ns_1_2_no_dsp_1_U4        |     |        | tmp_7          | fcmp    | auto     | 1       |
+|    and_ln104_4_fu_801_p2                 |     |        | and_ln104_4    | and     | auto     | 0       |
+|    minDist_2_fu_807_p3                   |     |        | minDist_2      | select  | auto_sel | 0       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U3      | 3   |        | mul22_3        | fmul    | maxdsp   | 3       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U3      | 3   |        | mul22_3_1      | fmul    | maxdsp   | 3       |
+|    faddfsub_32ns_32ns_32_7_full_dsp_1_U2 | 2   |        | dist_7         | fsub    | fulldsp  | 6       |
+|    icmp_ln104_10_fu_849_p2               |     |        | icmp_ln104_10  | setne   | auto     | 0       |
+|    icmp_ln104_11_fu_855_p2               |     |        | icmp_ln104_11  | seteq   | auto     | 0       |
+|    or_ln104_9_fu_861_p2                  |     |        | or_ln104_9     | or      | auto     | 0       |
+|    icmp_ln104_12_fu_867_p2               |     |        | icmp_ln104_12  | setne   | auto     | 0       |
+|    icmp_ln104_13_fu_873_p2               |     |        | icmp_ln104_13  | seteq   | auto     | 0       |
+|    or_ln104_10_fu_879_p2                 |     |        | or_ln104_10    | or      | auto     | 0       |
+|    and_ln104_5_fu_885_p2                 |     |        | and_ln104_5    | and     | auto     | 0       |
+|    fcmp_32ns_32ns_1_2_no_dsp_1_U4        |     |        | tmp_s          | fcmp    | auto     | 1       |
+|    and_ln104_6_fu_891_p2                 |     |        | and_ln104_6    | and     | auto     | 0       |
+|    minDist_3_fu_897_p3                   |     |        | minDist_3      | select  | auto_sel | 0       |
+|    select_ln104_2_fu_1001_p3             |     |        | select_ln104_2 | select  | auto_sel | 0       |
+|    or_ln104_fu_1008_p2                   |     |        | or_ln104       | or      | auto     | 0       |
+|    Class_fu_1012_p3                      |     |        | Class          | select  | auto_sel | 0       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U3      | 3   |        | mul22_4        | fmul    | maxdsp   | 3       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U3      | 3   |        | mul22_4_1      | fmul    | maxdsp   | 3       |
+|    faddfsub_32ns_32ns_32_7_full_dsp_1_U2 | 2   |        | dist_9         | fsub    | fulldsp  | 6       |
+|    icmp_ln104_14_fu_939_p2               |     |        | icmp_ln104_14  | setne   | auto     | 0       |
+|    icmp_ln104_15_fu_945_p2               |     |        | icmp_ln104_15  | seteq   | auto     | 0       |
+|    or_ln104_11_fu_951_p2                 |     |        | or_ln104_11    | or      | auto     | 0       |
+|    icmp_ln104_16_fu_957_p2               |     |        | icmp_ln104_16  | setne   | auto     | 0       |
+|    icmp_ln104_17_fu_963_p2               |     |        | icmp_ln104_17  | seteq   | auto     | 0       |
+|    or_ln104_12_fu_969_p2                 |     |        | or_ln104_12    | or      | auto     | 0       |
+|    and_ln104_7_fu_975_p2                 |     |        | and_ln104_7    | and     | auto     | 0       |
+|    fcmp_32ns_32ns_1_2_no_dsp_1_U4        |     |        | tmp_12         | fcmp    | auto     | 1       |
+|    and_ln104_8_fu_981_p2                 |     |        | and_ln104_8    | and     | auto     | 0       |
+|    minDist_4_fu_987_p3                   |     |        | minDist_4      | select  | auto_sel | 0       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U3      | 3   |        | mul22_5        | fmul    | maxdsp   | 3       |
+|    faddfsub_32ns_32ns_32_7_full_dsp_1_U2 | 2   |        | dist_10        | fsub    | fulldsp  | 6       |
+|    faddfsub_32ns_32ns_32_7_full_dsp_1_U2 | 2   |        | sub_5_1        | fsub    | fulldsp  | 6       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U3      | 3   |        | mul22_5_1      | fmul    | maxdsp   | 3       |
+|    faddfsub_32ns_32ns_32_7_full_dsp_1_U2 | 2   |        | dist_11        | fsub    | fulldsp  | 6       |
+|    icmp_ln104_18_fu_1055_p2              |     |        | icmp_ln104_18  | setne   | auto     | 0       |
+|    icmp_ln104_19_fu_1061_p2              |     |        | icmp_ln104_19  | seteq   | auto     | 0       |
+|    or_ln104_13_fu_1067_p2                |     |        | or_ln104_13    | or      | auto     | 0       |
+|    icmp_ln104_20_fu_1073_p2              |     |        | icmp_ln104_20  | setne   | auto     | 0       |
+|    icmp_ln104_21_fu_1079_p2              |     |        | icmp_ln104_21  | seteq   | auto     | 0       |
+|    or_ln104_14_fu_1085_p2                |     |        | or_ln104_14    | or      | auto     | 0       |
+|    and_ln104_9_fu_1091_p2                |     |        | and_ln104_9    | and     | auto     | 0       |
+|    fcmp_32ns_32ns_1_2_no_dsp_1_U4        |     |        | tmp_15         | fcmp    | auto     | 1       |
+|    and_ln104_10_fu_1097_p2               |     |        | and_ln104_10   | and     | auto     | 0       |
+|    minDist_5_fu_1103_p3                  |     |        | minDist_5      | select  | auto_sel | 0       |
+|    select_ln104_4_fu_1110_p3             |     |        | select_ln104_4 | select  | auto_sel | 0       |
+|    or_ln104_1_fu_1118_p2                 |     |        | or_ln104_1     | or      | auto     | 0       |
+|    Class_1_fu_1123_p3                    |     |        | Class_1        | select  | auto_sel | 0       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U3      | 3   |        | mul22_6        | fmul    | maxdsp   | 3       |
+|    faddfsub_32ns_32ns_32_7_full_dsp_1_U2 | 2   |        | dist_12        | fsub    | fulldsp  | 6       |
+|    faddfsub_32ns_32ns_32_7_full_dsp_1_U2 | 2   |        | sub_6_1        | fsub    | fulldsp  | 6       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U3      | 3   |        | mul22_6_1      | fmul    | maxdsp   | 3       |
+|    faddfsub_32ns_32ns_32_7_full_dsp_1_U2 | 2   |        | dist_13        | fsub    | fulldsp  | 6       |
+|    icmp_ln104_22_fu_1166_p2              |     |        | icmp_ln104_22  | setne   | auto     | 0       |
+|    icmp_ln104_23_fu_1172_p2              |     |        | icmp_ln104_23  | seteq   | auto     | 0       |
+|    or_ln104_15_fu_1178_p2                |     |        | or_ln104_15    | or      | auto     | 0       |
+|    icmp_ln104_24_fu_1184_p2              |     |        | icmp_ln104_24  | setne   | auto     | 0       |
+|    icmp_ln104_25_fu_1190_p2              |     |        | icmp_ln104_25  | seteq   | auto     | 0       |
+|    or_ln104_16_fu_1196_p2                |     |        | or_ln104_16    | or      | auto     | 0       |
+|    and_ln104_11_fu_1202_p2               |     |        | and_ln104_11   | and     | auto     | 0       |
+|    fcmp_32ns_32ns_1_2_no_dsp_1_U4        |     |        | tmp_18         | fcmp    | auto     | 1       |
+|    and_ln104_12_fu_1208_p2               |     |        | and_ln104_12   | and     | auto     | 0       |
+|    minDist_6_fu_1214_p3                  |     |        | minDist_6      | select  | auto_sel | 0       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U3      | 3   |        | mul22_7        | fmul    | maxdsp   | 3       |
+|    faddfsub_32ns_32ns_32_7_full_dsp_1_U2 | 2   |        | dist_14        | fsub    | fulldsp  | 6       |
+|    faddfsub_32ns_32ns_32_7_full_dsp_1_U2 | 2   |        | sub_7_1        | fsub    | fulldsp  | 6       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U3      | 3   |        | mul22_7_1      | fmul    | maxdsp   | 3       |
+|    faddfsub_32ns_32ns_32_7_full_dsp_1_U2 | 2   |        | dist_15        | fsub    | fulldsp  | 6       |
+|    icmp_ln104_26_fu_1259_p2              |     |        | icmp_ln104_26  | setne   | auto     | 0       |
+|    icmp_ln104_27_fu_1265_p2              |     |        | icmp_ln104_27  | seteq   | auto     | 0       |
+|    or_ln104_17_fu_1271_p2                |     |        | or_ln104_17    | or      | auto     | 0       |
+|    icmp_ln104_28_fu_1277_p2              |     |        | icmp_ln104_28  | setne   | auto     | 0       |
+|    icmp_ln104_29_fu_1283_p2              |     |        | icmp_ln104_29  | seteq   | auto     | 0       |
+|    or_ln104_18_fu_1289_p2                |     |        | or_ln104_18    | or      | auto     | 0       |
+|    and_ln104_13_fu_1295_p2               |     |        | and_ln104_13   | and     | auto     | 0       |
+|    fcmp_32ns_32ns_1_2_no_dsp_1_U4        |     |        | tmp_21         | fcmp    | auto     | 1       |
+|    and_ln104_14_fu_1301_p2               |     |        | and_ln104_14   | and     | auto     | 0       |
+|    minDist_7_fu_1307_p3                  |     |        | minDist_7      | select  | auto_sel | 0       |
+|    select_ln104_6_fu_1314_p3             |     |        | select_ln104_6 | select  | auto_sel | 0       |
+|    or_ln104_2_fu_1322_p2                 |     |        | or_ln104_2     | or      | auto     | 0       |
+|    Class_2_fu_1327_p3                    |     |        | Class_2        | select  | auto_sel | 0       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U3      | 3   |        | mul22_8        | fmul    | maxdsp   | 3       |
+|    faddfsub_32ns_32ns_32_7_full_dsp_1_U2 | 2   |        | dist_16        | fsub    | fulldsp  | 6       |
+|    faddfsub_32ns_32ns_32_7_full_dsp_1_U2 | 2   |        | sub_8_1        | fsub    | fulldsp  | 6       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U3      | 3   |        | mul22_8_1      | fmul    | maxdsp   | 3       |
+|    faddfsub_32ns_32ns_32_7_full_dsp_1_U2 | 2   |        | dist_17        | fsub    | fulldsp  | 6       |
+|    icmp_ln104_30_fu_1370_p2              |     |        | icmp_ln104_30  | setne   | auto     | 0       |
+|    icmp_ln104_31_fu_1376_p2              |     |        | icmp_ln104_31  | seteq   | auto     | 0       |
+|    or_ln104_19_fu_1382_p2                |     |        | or_ln104_19    | or      | auto     | 0       |
+|    icmp_ln104_32_fu_1388_p2              |     |        | icmp_ln104_32  | setne   | auto     | 0       |
+|    icmp_ln104_33_fu_1394_p2              |     |        | icmp_ln104_33  | seteq   | auto     | 0       |
+|    or_ln104_20_fu_1400_p2                |     |        | or_ln104_20    | or      | auto     | 0       |
+|    and_ln104_15_fu_1406_p2               |     |        | and_ln104_15   | and     | auto     | 0       |
+|    fcmp_32ns_32ns_1_2_no_dsp_1_U4        |     |        | tmp_24         | fcmp    | auto     | 1       |
+|    and_ln104_16_fu_1412_p2               |     |        | and_ln104_16   | and     | auto     | 0       |
+|    minDist_8_fu_1418_p3                  |     |        | minDist_8      | select  | auto_sel | 0       |
+|    faddfsub_32ns_32ns_32_7_full_dsp_1_U2 | 2   |        | sub_9          | fsub    | fulldsp  | 6       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U3      | 3   |        | mul22_9        | fmul    | maxdsp   | 3       |
+|    faddfsub_32ns_32ns_32_7_full_dsp_1_U2 | 2   |        | dist_18        | fsub    | fulldsp  | 6       |
+|    faddfsub_32ns_32ns_32_7_full_dsp_1_U2 | 2   |        | sub_9_1        | fsub    | fulldsp  | 6       |
+|    fmul_32ns_32ns_32_4_max_dsp_1_U3      | 3   |        | mul22_9_1      | fmul    | maxdsp   | 3       |
+|    faddfsub_32ns_32ns_32_7_full_dsp_1_U2 | 2   |        | dist_19        | fsub    | fulldsp  | 6       |
+|    icmp_ln104_34_fu_1460_p2              |     |        | icmp_ln104_34  | setne   | auto     | 0       |
+|    icmp_ln104_35_fu_1466_p2              |     |        | icmp_ln104_35  | seteq   | auto     | 0       |
+|    or_ln104_21_fu_1484_p2                |     |        | or_ln104_21    | or      | auto     | 0       |
+|    icmp_ln104_36_fu_1472_p2              |     |        | icmp_ln104_36  | setne   | auto     | 0       |
+|    icmp_ln104_37_fu_1478_p2              |     |        | icmp_ln104_37  | seteq   | auto     | 0       |
+|    or_ln104_22_fu_1488_p2                |     |        | or_ln104_22    | or      | auto     | 0       |
+|    and_ln104_17_fu_1492_p2               |     |        | and_ln104_17   | and     | auto     | 0       |
+|    fcmp_32ns_32ns_1_2_no_dsp_1_U4        |     |        | tmp_27         | fcmp    | auto     | 1       |
+|    and_ln104_18_fu_1498_p2               |     |        | and_ln104_18   | and     | auto     | 0       |
+|    select_ln104_fu_1504_p3               |     |        | select_ln104   | select  | auto_sel | 0       |
+|    or_ln104_3_fu_1512_p2                 |     |        | or_ln104_3     | or      | auto     | 0       |
+|    Class_3_fu_1517_p3                    |     |        | Class_3        | select  | auto_sel | 0       |
+|  + do_compute_Pipeline_2                 | 0   |        |                |         |          |         |
+|    exitcond2916_fu_50_p2                 |     |        | exitcond2916   | seteq   | auto     | 0       |
+|    empty_39_fu_56_p2                     |     |        | empty_39       | add     | fabric   | 0       |
+|  + do_compute_Pipeline_S2_KDims_0        | 0   |        |                |         |          |         |
+|    icmp_ln120_fu_76_p2                   |     |        | icmp_ln120     | seteq   | auto     | 0       |
+|    add_ln120_fu_82_p2                    |     |        | add_ln120      | add     | fabric   | 0       |
+|  + do_compute_Pipeline_S2_Points_0       | 0   |        |                |         |          |         |
+|    icmp_ln124_fu_219_p2                  |     |        | icmp_ln124     | seteq   | auto     | 0       |
+|    add_ln124_fu_225_p2                   |     |        | add_ln124      | add     | fabric   | 0       |
+|    add_ln126_fu_252_p2                   |     |        | add_ln126      | add     | fabric   | 0       |
+|    addr_cmp16_fu_265_p2                  |     |        | addr_cmp16     | seteq   | auto     | 0       |
+|    reuse_select17_fu_336_p3              |     |        | reuse_select17 | select  | auto_sel | 0       |
+|    add_ln126_1_fu_343_p2                 |     |        | add_ln126_1    | add     | fabric   | 0       |
+|    mul76_fu_283_p2                       |     |        | mul76          | add     | fabric   | 0       |
+|    addr_cmp10_fu_308_p2                  |     |        | addr_cmp10     | seteq   | auto     | 0       |
+|    reuse_select11_fu_357_p3              |     |        | reuse_select11 | select  | auto_sel | 0       |
+|    addr_cmp_fu_317_p2                    |     |        | addr_cmp       | seteq   | auto     | 0       |
+|    reuse_select_fu_371_p3                |     |        | reuse_select   | select  | auto_sel | 0       |
+|  + do_compute_Pipeline_S2_Clusters_0     | 0   |        |                |         |          |         |
+|    icmp_ln134_fu_100_p2                  |     |        | icmp_ln134     | seteq   | auto     | 0       |
+|    add_ln134_fu_106_p2                   |     |        | add_ln134      | add     | fabric   | 0       |
+|    sitofp_32ns_32_5_no_dsp_1_U27         |     |        | conv           | sitofp  | auto     | 4       |
+|    fdiv_32ns_32ns_32_12_no_dsp_1_U25     |     |        | div            | fdiv    | fabric   | 11      |
+|    fdiv_32ns_32ns_32_12_no_dsp_1_U26     |     |        | div_1          | fdiv    | fabric   | 11      |
+|  + do_compute_Pipeline_memcp_1_memcp_2   | 0   |        |                |         |          |         |
+|    icmp_ln163_fu_144_p2                  |     |        | icmp_ln163     | seteq   | auto     | 0       |
+|    add_ln163_fu_150_p2                   |     |        | add_ln163      | add     | fabric   | 0       |
+|    icmp_ln165_fu_162_p2                  |     |        | icmp_ln165     | seteq   | auto     | 0       |
+|    select_ln163_fu_168_p3                |     |        | select_ln163   | select  | auto_sel | 0       |
+|    add_ln163_1_fu_176_p2                 |     |        | add_ln163_1    | add     | fabric   | 0       |
+|    select_ln163_1_fu_182_p3              |     |        | select_ln163_1 | select  | auto_sel | 0       |
+|    first_iter_0_fu_190_p2                |     |        | first_iter_0   | seteq   | auto     | 0       |
+|    icmp_ln166_fu_202_p2                  |     |        | icmp_ln166     | seteq   | auto     | 0       |
+|    select_ln166_fu_245_p3                |     |        | select_ln166   | select  | auto_sel | 0       |
+|    add_ln165_fu_208_p2                   |     |        | add_ln165      | add     | fabric   | 0       |
++------------------------------------------+-----+--------+----------------+---------+----------+---------+
+
+
+================================================================
+== Storage Report
+================================================================
++--------------------+---------------+-----------+------+------+--------+----------------+------+---------+------------------+
+| Name               | Usage         | Type      | BRAM | URAM | Pragma | Variable       | Impl | Latency | Bitwidth, Depth, |
+|                    |               |           |      |      |        |                |      |         | Banks            |
++--------------------+---------------+-----------+------+------+--------+----------------+------+---------+------------------+
+| + do_compute       |               |           | 5    | 0    |        |                |      |         |                  |
+|   control_s_axi_U  | interface     | s_axilite |      |      |        |                |      |         |                  |
+|   gmem0_m_axi_U    | interface     | m_axi     | 1    |      |        |                |      |         |                  |
+|   gmem1_m_axi_U    | interface     | m_axi     | 2    |      |        |                |      |         |                  |
+|   gmem2_m_axi_U    | interface     | m_axi     | 2    |      |        |                |      |         |                  |
+|   pointsPerClass_U | ram_1p array  |           |      |      |        | pointsPerClass | auto | 1       | 32, 10, 1        |
+|   auxCentroids_U   | ram_s2p array |           |      |      |        | auxCentroids   | auto | 1       | 32, 10, 1        |
+|   auxCentroids_1_U | ram_s2p array |           |      |      |        | auxCentroids_1 | auto | 1       | 32, 10, 1        |
++--------------------+---------------+-----------+------+------+--------+----------------+------+---------+------------------+
+
+
+================================================================
+== Pragma Report
+================================================================
+* Valid Pragma Syntax
++-----------+------------------------------------------------+-------------------------------------------------+
+| Type      | Options                                        | Location                                        |
++-----------+------------------------------------------------+-------------------------------------------------+
+| interface | m_axi port=data offset=slave bundle=gmem0      | KMEANS_HLS_base.cpp:44 in do_compute, data      |
+| interface | m_axi port=classMap offset=slave bundle=gmem1  | KMEANS_HLS_base.cpp:45 in do_compute, classMap  |
+| interface | m_axi port=centroids offset=slave bundle=gmem2 | KMEANS_HLS_base.cpp:46 in do_compute, centroids |
+| interface | s_axilite port=data bundle=control             | KMEANS_HLS_base.cpp:47 in do_compute, data      |
+| interface | s_axilite port=classMap bundle=control         | KMEANS_HLS_base.cpp:48 in do_compute, classMap  |
+| interface | s_axilite port=centroids bundle=control        | KMEANS_HLS_base.cpp:49 in do_compute, centroids |
+| interface | s_axilite port=return bundle=control           | KMEANS_HLS_base.cpp:50 in do_compute, return    |
++-----------+------------------------------------------------+-------------------------------------------------+
+
+
